@@ -1,8 +1,13 @@
-# Assignment 1: Extracting linguistic features using ```spaCy```
+# Assignment 2: Text classification benchmarks
 
-This repository contains the code for **Assignment 1** from *Language Analytics* course at *Aarhus University*.
+This repository contains the code for **Assignment 2** from *Language Analytics* course at *Aarhus University*.
 
-The task for the present assignment is to extract the linguistic information from a corpus of multiple texts. In this case, the code has to extract the relative frequency (RF) of nouns, verbs, adjectives, adverbs, and a total number of unique personal names, locations or organizations from the given texts.
+The task for the present assignment is to train two simple (binary) classification models on the text data.
+More specifically:
+- **script-2-1.py** script is designed to train a **logistic classifier**;
+- **script-2-2.py** script is designed to train a **neural network**.
+
+Both models are used to classify text into being *true* or *fake*.
 
 This document is structured as follows:
 
@@ -14,33 +19,35 @@ This document is structured as follows:
 
 ## 1. Data and structure
 
-*The Uppsala Student English Corpus (USE)* dataset is used in the present assignment. The information about the data and its documentation can be found [here](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/2457). Make sure to download the dataset and store it in a folder called ```in```.
+*The Fake News* dataset is used in the present assignment. The data can be downloaded [here](https://www.kaggle.com/datasets/jillanisofttech/fake-or-real-news). Make sure to download the dataset and store it in a folder called ```in``` under the name of *fake_or_real_news.csv*.
 
 The overall structure of the folders should be as follows:
+
 ```
-assignment-1-LANG/
+assignment-2-LANG/
 ├── in/
-│   ├── USEcorpus/
-│       ├── USEcorpus/
-│       │   ├── a1/
-│       │   ├── .../
-│       │   └── c1/
-│       └── readme.md
+│   └── fake_or_real_news.csv
 ├── out/
 │   ├── emissions/
-│   │   ├── emissions_assignment_1.csv
-│   │   └── emissions-base-... .csv
-│   ├── a1_counts.csv
-│   ├── ...
-│   └── c1_counts.csv
+│   │   ├── emissions_assignment_2.csv
+│   │   ├── emissions-base-... .csv
+|   │   └── emissions-base-... .csv
+│   ├── models/
+│   │   ├── log_reg_classifier.csv
+│   │   ├── neural_classifier.csv
+│   │   ├── tfidf_logistic_vectorizer.joblib
+│   │   └── tfidf_neural_vectorizer.joblib
+│   ├── log_reg_report.csv
+│   └── neural_report.csv
 ├── src/
 │   ├── functions.py
-│   └── script-1.py
+│   ├── script-2-1.py
+│   └── script-2-2.py
 ├── README.md
 ├── requirements.txt
 └── setup.sh
 ```
-The **script-1.py** contains the main code, which produces the output. The **functions.py** script is a script which contains predefined functions, used in the main code.
+The **script-2-1.py** contains the main code for training a logistic classifier and **script-2-2.py** contains the code for training a neural network. The **functions.py** is a script which contains predefined functions which are used in latter scripts.
 
 ## 2. Reproduction instructions
 
@@ -49,7 +56,7 @@ In order to run the Python script smoothly, the following steps should be comple
 1. Open the terminal and set the working directory to the folder:
 
     ```python
-    cd your_path_to/assignment-1-LANG
+    cd your_path_to/assignment-2-LANG
     ```
 2. Run the following command to install the required modules and set up the *virtual environment*:
 
@@ -62,11 +69,21 @@ In order to run the Python script smoothly, the following steps should be comple
     source ./env/bin/activate
     ```
 
-4. Run the Python script:
+4. Run both Python scripts:
+
+    - The following code will execute the Python script for training a **logistic classifier** on the data:
  
-    ```python
-    python src/script-1.py
-    ```
+        ```python
+        python src/script-2-1.py
+        ```
+
+    - The following code will execute the Python script for training a **neural network** on the data:
+
+
+        ```python
+        python src/script-2-2.py
+        ```
+
 5. Finally, once the script has finished running, deactivate the virtual environment: 
 
     ```
@@ -75,41 +92,25 @@ In order to run the Python script smoothly, the following steps should be comple
     The output files will be stored and found in the folder called ```out```.
 
 ## 3. Output summary
-The ```out``` folder will contain multiple **csv** files, one for each data folder located in the folder ```in``` (```a1```, ```a2```, ..., ```c1```).
 
-An example of the **csv** file:
+The ```out``` folder will contain two scripts with logistic regression (*log_reg_report.csv*) and neural network's (*neural_report.csv*) classification reports. Subfolder ```models``` will contain both models and their vectorizers.
 
-Filename | RelFreq NOUN | RelFreq VERB | RelFreq ADJ | RelFreq ADV | Unique PER | Unique LOC | Unique ORG | 
---- | --- | --- | --- | --- | --- | --- | --- |
-0100.a1.txt | 1526.39 | 1526.39 | 827.39 | 827.39 | 0 | 0 | 0 |
-0101.a1.txt | 1181.7 | 1257.94 | 597.2 | 851.33 | 1 | 0 | 0 |
-0102.a1.txt | 1506.68 | 1227.22 | 692.59 | 486.03 | 1 | 0 | 0 |
-...
+The classification reports of both models indicate approximately similar classification quality. In both cases, models seem to classify text as being *fake* or *true* pretty well, with *F1-score* resulting in 0.86 - 0.87 for both classification models.
 
-The columns represent:
-
--  *Filename* - text document for which the data was produced;
-- *RelFreqNOUN* - the RF of nouns;
-- *RelFreqVERB* - the RF of verbs;
-- *RelFreqADJ* - the RF of adjectives;
-- *RelFreqADV* - the RF of adverbs;
-- *UniquePER* - the number of unique personal names in a given text;
-- *UniqueLOC* - the number of unique locations in a given text;
-- *UniqueORG* - the number of unique organizations in a given text.
 
 ## 4. Ways of improvement
 
 As with any programming task, there are always ways of how the code or the analysis can be improved. Here are a few points on how the code/analysis could be improved:
 
-- Use a larger English language model. This could enhance the accuracy of the results, however, it would require more time and resources to process the text.
-- Provide the user with more flexibility, for example, where the input files are located and how the files are named. Moreover, the user could be allowed to set the size of the language model and choose which language model to load.
-- The main code could be split into smaller parts, which would allow to monitor the environment impact of the subtasks.
+- Provide the user with more flexibility, for example, allow the user to input their own choice for hidden layers for neural network classification model. Additionally, allowing the user to specify the name of the dataset could make the code usable on other datasets. 
+- Create more (separate current functions into smaller ones) predefined functions in **functions.py**, which could potentially help in debugging the errors, once these arise.
+
 
 ## 5. CodeCarbon tracking
 
 In this repository, the **CodeCarbon** was used to monitor environmental impact of the code.
 For a more detailed analysis of these results, please see Assignment 5.
 
-*New emissions data (see ```out/emissions``` folder)  is generated every time the script is run.*
+*New emissions data (see ```out/emissions``` folder) is generated every time the scripts are run.*
 
-*The script was run with 24 CPUs and took around 4 minutes to produce the output.*
+*Both scripts were run with 24 CPUs and took around 20-30 seconds to produce the output.*
