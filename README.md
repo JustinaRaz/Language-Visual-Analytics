@@ -1,13 +1,8 @@
-# Assignment 2: Text classification benchmarks
+# Assignment 3: Query expansion with word embeddings via ```gensim```
 
-This repository contains the code for **Assignment 2** from *Language Analytics* course at *Aarhus University*.
+This repository contains the code for **Assignment 3** from *Language Analytics* course at *Aarhus University*.
 
-The task for the present assignment is to train two simple (binary) classification models on the text data.
-More specifically:
-- **script-2-1.py** script is designed to train a **logistic classifier**;
-- **script-2-2.py** script is designed to train a **neural network**.
-
-Both models are used to classify text into being *true* or *fake*.
+The task of the present assignment is to analyze a corpus of song lyrics and evaluate how frequently a certain topic, for instance, "love", and similar words related to "love", appear in songs by various artists. Word embeddings are used to expand the query and include similar terms to the target word to later calculate the percentage of songs by a specific artist that contain these terms.
 
 This document is structured as follows:
 
@@ -19,35 +14,27 @@ This document is structured as follows:
 
 ## 1. Data and structure
 
-*The Fake News* dataset is used in the present assignment. The data can be downloaded [here](https://www.kaggle.com/datasets/jillanisofttech/fake-or-real-news). Make sure to download the dataset and store it in a folder called ```in``` under the name of *fake_or_real_news.csv*.
+*Spotify Million Song Dataset*  is used in the present assignment. The data can be downloaded [here](https://www.kaggle.com/datasets/joebeachcapital/57651-spotify-songs). Make sure to download the dataset and store it in a folder called ```in``` (see the directory tree below). The downloaded dataset can be renamed, and in this case, it is called *spotify.csv*.
 
 The overall structure of the folders should be as follows:
 
 ```
-assignment-2-LANG/
+assignment-3-LANG/
 ├── in/
-│   └── fake_or_real_news.csv
+│   └── spotify.csv
 ├── out/
-│   ├── emissions/
-│   │   ├── emissions_assignment_2.csv
-│   │   ├── emissions-base-... .csv
-|   │   └── emissions-base-... .csv
-│   ├── models/
-│   │   ├── log_reg_classifier.csv
-│   │   ├── neural_classifier.csv
-│   │   ├── tfidf_logistic_vectorizer.joblib
-│   │   └── tfidf_neural_vectorizer.joblib
-│   ├── log_reg_report.csv
-│   └── neural_report.csv
+│   └── emissions/
+│       ├── emissions_assignment_3.csv
+│       └── emissions_base... .csv
 ├── src/
 │   ├── functions.py
-│   ├── script-2-1.py
-│   └── script-2-2.py
+│   └── script-3.py
 ├── README.md
 ├── requirements.txt
 └── setup.sh
 ```
-The **script-2-1.py** contains the main code for training a logistic classifier and **script-2-2.py** contains the code for training a neural network. The **functions.py** is a script which contains predefined functions which are used in latter scripts.
+
+The **script-3.py** contains the main code, which produces the output in the terminal. The **functions.py** script is a script which contains predefined functions, used in the main code.
 
 ## 2. Reproduction instructions
 
@@ -56,7 +43,7 @@ In order to run the Python script smoothly, the following steps should be comple
 1. Open the terminal and set the working directory to the folder:
 
     ```python
-    cd your_path_to/assignment-2-LANG
+    cd your_path_to/assignment-3-LANG
     ```
 2. Run the following command to install the required modules and set up the *virtual environment*:
 
@@ -69,41 +56,31 @@ In order to run the Python script smoothly, the following steps should be comple
     source ./env/bin/activate
     ```
 
-4. Run both Python scripts:
+4. Run the Python script. Make sure to also specify the name of the *csv* file, the artist's name and a word:
 
-    - The following code will execute the Python script for training a **logistic classifier** on the data:
- 
-        ```python
-        python src/script-2-1.py
-        ```
-
-    - The following code will execute the Python script for training a **neural network** on the data:
-
-
-        ```python
-        python src/script-2-2.py
-        ```
+    ```python
+    python src/script-3.py spotify.csv ABBA love
+    ```
+    In this case, I am specifying that my dataset is called *spotify.csv*, I am interested in song lyrics by *ABBA*, and would like to find the percentage of ABBA's songs related to *love*.
 
 5. Finally, once the script has finished running, deactivate the virtual environment: 
 
     ```
     deactivate
     ```
-    The output files will be stored and found in the folder called ```out```.
 
 ## 3. Output summary
+Once both scripts have finished running, the main output can be seen in the terminal. Based on the inputs specified above, the output looks as below:
 
-The ```out``` folder will contain two scripts with logistic regression (*log_reg_report.csv*) and neural network's (*neural_report.csv*) classification reports. Subfolder ```models``` will contain both models and their vectorizers.
-
-The classification reports of both models indicate approximately similar classification quality. In both cases, models seem to classify text as being *fake* or *true* pretty well, with *F1-score* resulting in 0.86 - 0.87 for both classification models.
+**76.99% of ABBA's songs contain words related to love.**
 
 
 ## 4. Ways of improvement
 
-As with any programming task, there are always ways of how the code or the analysis can be improved. Here are a few points on how the code/analysis could be improved:
+As with any programming task, there are always ways of how the code or the analysis can be improved. Here are some ways how the code/analysis could be improved:
 
-- Provide the user with more flexibility, for example, allow the user to input their own choice for hidden layers for neural network classification model. Additionally, allowing the user to specify the name of the dataset could make the code usable on other datasets. 
-- Create more (separate current functions into smaller ones) predefined functions in **functions.py**, which could potentially help in debugging the errors, once these arise.
+- Create more (separate current functions into smaller ones) predefined functions in **functions.py**, which could potentially help in debugging the errors, once these arise. 
+- These simplified functions would also allow to monitor environmental impact of the code in a more detailed way.
 
 
 ## 5. CodeCarbon tracking
@@ -111,6 +88,6 @@ As with any programming task, there are always ways of how the code or the analy
 In this repository, the **CodeCarbon** was used to monitor environmental impact of the code.
 For a more detailed analysis of these results, please see Assignment 5.
 
-*New emissions data (see ```out/emissions``` folder) is generated every time the scripts are run.*
+*New emissions data (see ```out/emissions``` folder)  is generated every time the script is run.*
 
-*Both scripts were run with 24 CPUs and took around 20-30 seconds to produce the output.*
+*The script was run with 24 CPUs and took around 25 seconds to produce the output.*
